@@ -1,4 +1,4 @@
-/* eslint-disable */
-import {generatePhotos} from './data.js';
+import { getPictures } from './data.js';
+import { renderThumbnails } from './thumbnails.js';
 
-const photos = generatePhotos();
+renderThumbnails(getPictures());
