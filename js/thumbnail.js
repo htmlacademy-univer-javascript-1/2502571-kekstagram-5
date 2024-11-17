@@ -1,3 +1,5 @@
+import {objects} from './data.js';
+
 const thumbnailTemplate = document
   .querySelector('#picture')
   .content.querySelector('.picture');
@@ -24,4 +26,4 @@ const renderThumbnails = (pictures) => {
   container.append(fragment);
 };
 
-export { renderThumbnails };
+renderThumbnails(objects);
