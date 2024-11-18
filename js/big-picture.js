@@ -4,8 +4,12 @@ const body = document.querySelector('body');
 const closeButton = document.querySelector('.big-picture__cancel');
 const bigPicture = document.querySelector('.big-picture');
 const commentsList = document.querySelector('.social__comments');
+const commentsLoader = document.querySelector('.comments-loader');
 const socialComments = document.querySelector('.social__comment-count');
 
+const POSSIBLE_COMMENTS_GROUP = 5;
+
+let commentsShown = 0;
 let comments = [];
 
 const renderPictureDetails = ({ url, likes, description }) => {
@@ -29,14 +33,23 @@ const createComment = ({ name, avatar, message }) => {
 };
 
 const renderComments = () => {
+  commentsShown += POSSIBLE_COMMENTS_GROUP;
+
+  if (commentsShown >= comments.length) {
+    commentsLoader.classList.add('hidden');
+    commentsShown = comments.length;
+  } else {
+    commentsLoader.classList.remove('hidden');
+  }
+
   const fragment = document.createDocumentFragment();
-  comments.forEach((comment) => {
-    fragment.append(createComment(comment));
-  });
+  for (let index = 0; index < commentsShown; index++) {
+    fragment.append(createComment(comments[index]));
+  }
 
   commentsList.innerHTML = '';
   commentsList.append(fragment);
-  socialComments.innerHTML = `${comments.length} из <span class="comments-count">${comments.length}</span> комментариев`;
+  socialComments.innerHTML = `${commentsShown} из <span class="comments-count">${comments.length}</span> комментариев`;
 };
 
 const onEscKeydown = (evt) => {
@@ -57,11 +70,16 @@ const openBigPicture = (data) => {
   }
 };
 
-function closeBigPicture() {
+function closeBigPicture () {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onEscKeydown);
+  commentsShown = 0;
 }
+
+commentsLoader.addEventListener('click', () => {
+  renderComments();
+});
 
 const onCloseButtonClick = () => {
   closeBigPicture();
