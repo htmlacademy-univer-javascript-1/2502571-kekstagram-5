@@ -1,3 +1,4 @@
+
 import { resetScale } from './scale.js';
 import { init as initEffect, reset as resetEffect} from './effects.js';
 import {sendData} from './api.js';
@@ -28,6 +29,17 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
+const showModal = (evt) => {
+  imgPreview.querySelector('img').src = URL.createObjectURL(evt.target.files[0]);
+  const imageURL = imgPreview.querySelector('img').src;
+  effectsPreview.forEach((element) => {
+    element.style.backgroundImage = `url('${imageURL}')`;
+  });
+  overlay.classList.remove('hidden');
+  body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
 const hideModal = () => {
   form.reset();
   resetScale();
@@ -36,35 +48,6 @@ const hideModal = () => {
   overlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  form.removeEventListener('submit', onFormSubmit); // eslint-disable-line
-};
-
-const onFormSubmit = (async (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    submitButton.disabled = true;
-    await sendData(new FormData(form))
-      .then (() => {
-        showSuccessMessage();
-        hideModal();
-      })
-      .catch(() => {
-        showErrorMessage();
-        hideModal();
-      });
-  }
-});
-
-const showModal = (evt) => {
-  imgPreview.querySelector('img').src = URL.createObjectURL(evt.target.files[0]);
-  const imageURL = imgPreview.querySelector('img').src;
-  effectsPreview.forEach((element) => {
-    element.style.backgroundImage = `url('${imageURL}')`;
-  });
-  form.addEventListener('submit', onFormSubmit);
-  overlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
 };
 
 const isTextFieldFocused = () => document.activeElement === hashtagField || document.activeElement === commentField;
@@ -83,6 +66,24 @@ const onCancelButtonClick = () => {
 const onFileInputChange = (evt) => {
   showModal(evt);
 };
+
+const onFormSubmit = async (evt) => {
+  evt.preventDefault();
+  if (pristine.validate()) {
+    submitButton.disabled = true;
+    try {
+      await sendData(new FormData(form));
+      showSuccessMessage();
+      hideModal();
+    } catch {
+      showErrorMessage();
+      hideModal();
+    } finally {
+      submitButton.disabled = false;
+    }
+  }
+};
+form.addEventListener('submit', onFormSubmit);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
