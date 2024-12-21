@@ -13,14 +13,14 @@ const hideMessage = () => {
   message.remove();
 };
 
-function closeMessageByEscape(evt) {//всплытие
+function closeMessageByEscape(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     hideMessage();
   }
 }
 
-function closeMessageByBodyClick(evt) {//всплытие
+function closeMessageByBodyClick(evt) {
   if (!(evt.target.closest('.success__inner') || evt.target.closest('.error__inner'))) {
     hideMessage();
   }
