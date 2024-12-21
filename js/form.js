@@ -28,6 +28,33 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
+const hideModal = () => {
+  form.reset();
+  resetScale();
+  resetEffect();
+  pristine.reset();
+  overlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
+  form.removeEventListener('submit', onFormSubmit); // eslint-disable-line
+};
+
+const onFormSubmit = (async (evt) => {
+  evt.preventDefault();
+  if (pristine.validate()) {
+    submitButton.disabled = true;
+    await sendData(new FormData(form))
+      .then (() => {
+        showSuccessMessage();
+        hideModal();
+      })
+      .catch(() => {
+        showErrorMessage();
+        hideModal();
+      });
+  }
+});
+
 const showModal = (evt) => {
   imgPreview.querySelector('img').src = URL.createObjectURL(evt.target.files[0]);
   const imageURL = imgPreview.querySelector('img').src;
@@ -38,17 +65,6 @@ const showModal = (evt) => {
   overlay.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
-};
-
-const hideModal = () => {
-  form.reset();
-  resetScale();
-  resetEffect();
-  pristine.reset();
-  overlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  form.removeEventListener('submit', onFormSubmit);
 };
 
 const isTextFieldFocused = () => document.activeElement === hashtagField || document.activeElement === commentField;
@@ -67,22 +83,6 @@ const onCancelButtonClick = () => {
 const onFileInputChange = (evt) => {
   showModal(evt);
 };
-
-const onFormSubmit = ('submit', async (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    submitButton.disabled = true;
-    await sendData(new FormData(form))
-    .then (() => {
-      showSuccessMessage();
-      hideModal();
-    })
-    .catch(() => {
-      showErrorMessage();
-      hideModal();
-    })
-  }
-});
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
