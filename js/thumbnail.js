@@ -1,4 +1,3 @@
-import {objects} from './data.js';
 import {openBigPicture} from './big-picture.js';
 
 
@@ -16,7 +15,8 @@ const createThumbnail = (data) => {
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
   thumbnail.querySelector('.picture__likes').textContent = likes;
 
-  thumbnail.addEventListener('click', () => {
+  thumbnail.addEventListener('click', (evt) => {
+    evt.preventDefault();
     openBigPicture(data);
   });
 
@@ -33,4 +33,4 @@ const renderThumbnails = (pictures) => {
   container.append(fragment);
 };
 
-renderThumbnails(objects);
+export { renderThumbnails };
