@@ -22,6 +22,7 @@ const changeThumbnailes = (photos, filter) => {
   const activeFilter = document.querySelector(`.${ACTIVE_CLASS}`);
   activeFilter.classList.remove(ACTIVE_CLASS);
   debounce(renderThumbnails(photos));
+
   filter.classList.add(ACTIVE_CLASS);
 };
 

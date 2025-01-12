@@ -1,3 +1,4 @@
+
 import { resetScale } from './scale.js';
 import { init as initEffect, reset as resetEffect } from './effects.js';
 import { sendData } from './api.js';
@@ -92,6 +93,7 @@ const onFormSubmit = async (evt) => {
     }
   }
 };
+form.addEventListener('submit', onFormSubmit);
 
 elements.fileField.addEventListener('change', onFileInputChange);
 elements.cancelButton.addEventListener('click', onCancelButtonClick);
