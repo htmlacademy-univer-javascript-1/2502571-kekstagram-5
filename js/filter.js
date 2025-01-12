@@ -17,13 +17,16 @@ const getDiscussedThumbnailes = (photos) => photos.slice().sort(sortByComments);
 
 const removeThumbnailes = () => document.querySelectorAll('.picture').forEach((photo) => photo.remove());
 
-const debouncedRenderThumbnails = debounce(renderThumbnails);
+
+const debouncedRenderThumbnails = debounce((filteredPhotos) => {
+  removeThumbnailes();
+  renderThumbnails(filteredPhotos);
+});
 
 const changeThumbnailes = (photos, filter) => {
   const activeFilter = document.querySelector(`.${ACTIVE_CLASS}`);
   activeFilter.classList.remove(ACTIVE_CLASS);
   filter.classList.add(ACTIVE_CLASS);
-  removeThumbnailes();
   debouncedRenderThumbnails(photos);
 };
 
