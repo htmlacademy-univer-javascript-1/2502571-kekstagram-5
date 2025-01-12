@@ -21,20 +21,14 @@ const changeThumbnailes = (photos, filter) => {
   removeThumbnailes();
   const activeFilter = document.querySelector(`.${ACTIVE_CLASS}`);
   activeFilter.classList.remove(ACTIVE_CLASS);
-  renderThumbnails(photos);
+  debounce(renderThumbnails(photos));
   filter.classList.add(ACTIVE_CLASS);
 };
 
 export const showFilteredPhotos = (photos) => {
   renderThumbnails(photos);
   filterBlock.classList.remove('img-filters--inactive');
-  defaultfFilter.addEventListener('click', debounce(() => {
-    changeThumbnailes(photos, defaultfFilter);
-  }));
-  randomFilter.addEventListener('click', debounce(() => {
-    changeThumbnailes(getRandomThumbnailes(photos, MAX_RANDOM_THUMBNAILES_COUNT), randomFilter);
-  }));
-  discussedFilter.addEventListener('click', debounce(() => {
-    changeThumbnailes(getDiscussedThumbnailes(photos), discussedFilter);
-  }));
+  defaultfFilter.addEventListener('click',() => changeThumbnailes(photos, defaultfFilter));
+  randomFilter.addEventListener('click', () => changeThumbnailes(getRandomThumbnailes(photos, MAX_RANDOM_THUMBNAILES_COUNT), randomFilter));
+  discussedFilter.addEventListener('click', () => changeThumbnailes(getDiscussedThumbnailes(photos), discussedFilter));
 };
