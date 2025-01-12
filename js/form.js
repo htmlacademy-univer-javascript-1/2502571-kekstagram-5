@@ -93,7 +93,6 @@ const onFormSubmit = async (evt) => {
     }
   }
 };
-form.addEventListener('submit', onFormSubmit);
 
 elements.fileField.addEventListener('change', onFileInputChange);
 elements.cancelButton.addEventListener('click', onCancelButtonClick);
