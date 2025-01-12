@@ -5,16 +5,26 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const createUniqueRandomNumberList = (min, max, length) => {
-  const previousNumbers = [];
-  while (previousNumbers.length < length) {
-    let currentValue = getRandomInteger(min, max);
-    while (previousNumbers.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
+const getRandomElementsArray = (array, count) => {
+  const randomIndexList = [];
+  const max = Math.min(count, array.length);
+  while (randomIndexList.length < max) {
+    const index = getRandomInteger(0, array.length - 1);
+    if (!randomIndexList.includes(index)) {
+      randomIndexList.push(index);
     }
-    previousNumbers.push(currentValue);
   }
-  return previousNumbers;
+  return randomIndexList.map((index) => array[index]);
+};
+
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
 };
 
 const getUniqueNumber = (list, usedNumbers) => {
@@ -30,7 +40,8 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 export {
   getRandomInteger,
-  createUniqueRandomNumberList,
   getUniqueNumber,
-  isEscapeKey
+  getRandomElementsArray,
+  isEscapeKey,
+  debounce
 };

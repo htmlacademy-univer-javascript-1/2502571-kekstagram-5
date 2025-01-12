@@ -2,40 +2,39 @@ const SCALE_STEP = 25;
 const MIN_SCALE = 25;
 const DEFAULT_SCALE = 100;
 
-const modalElement = document.querySelector('.img-upload');
-const smallButtonElement = modalElement.querySelector('.scale__control--smaller');
-const bigButtonElement = modalElement.querySelector('.scale__control--bigger');
-const scaleInputElement = modalElement.querySelector('.scale__control--value');
-const imageElement = modalElement.querySelector('.img-upload__preview img');
+// Собираем нужные элементы в объект
+const elements = {
+  modal: document.querySelector('.img-upload'),
+  smallButton: document.querySelector('.scale__control--smaller'),
+  bigButton: document.querySelector('.scale__control--bigger'),
+  scaleInput: document.querySelector('.scale__control--value'),
+  image: document.querySelector('.img-upload__preview img'),
+};
 
 const scaleImage = (value) => {
-  imageElement.style.transform = `scale(${value / 100})`;
-  scaleInputElement.value = `${value}%`;
+  elements.image.style.transform = `scale(${value / 100})`;
+  elements.scaleInput.value = `${value}%`;
 };
 
 const onSmallerButtonClick = () => {
-  const currentValue = parseInt(scaleInputElement.value, 10);
+  const currentValue = parseInt(elements.scaleInput.value, 10);
   const newValue = currentValue - SCALE_STEP;
   if (newValue >= MIN_SCALE) {
     scaleImage(newValue);
-  } else {
-    smallButtonElement.setAttribute('disabled');
   }
 };
 
 const onBiggerButtonClick = () => {
-  const currentValue = parseInt(scaleInputElement.value, 10);
+  const currentValue = parseInt(elements.scaleInput.value, 10);
   const newValue = currentValue + SCALE_STEP;
   if (newValue <= DEFAULT_SCALE) {
     scaleImage(newValue);
-  } else {
-    bigButtonElement.setAttribute('disabled');
   }
 };
 
 const resetScale = () => scaleImage(DEFAULT_SCALE);
 
-smallButtonElement.addEventListener('click', onSmallerButtonClick);
-bigButtonElement.addEventListener('click', onBiggerButtonClick);
+elements.smallButton.addEventListener('click', onSmallerButtonClick);
+elements.bigButton.addEventListener('click', onBiggerButtonClick);
 
-export{ resetScale };
+export { resetScale };
