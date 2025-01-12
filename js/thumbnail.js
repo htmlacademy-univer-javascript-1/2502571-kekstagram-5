@@ -1,22 +1,25 @@
-import {objects} from './data.js';
-import {openBigPicture} from './big-picture.js';
+import { openBigPicture } from './big-picture.js';
 
-
-const thumbnailTemplate = document
-  .querySelector('#picture')
-  .content.querySelector('.picture');
-const container = document.querySelector('.pictures');
+const elements = {
+  thumbnailTemplate: document.querySelector('#picture').content.querySelector('.picture'),
+  container: document.querySelector('.pictures'),
+};
 
 const createThumbnail = (data) => {
   const { likes, url, description, comments } = data;
-  const thumbnail = thumbnailTemplate.cloneNode(true);
+  const thumbnail = elements.thumbnailTemplate.cloneNode(true);
 
-  thumbnail.querySelector('.picture__img').src = url;
-  thumbnail.querySelector('.picture__img').alt = description;
-  thumbnail.querySelector('.picture__comments').textContent = comments.length;
-  thumbnail.querySelector('.picture__likes').textContent = likes;
+  const thumbnailImage = thumbnail.querySelector('.picture__img');
+  const thumbnailComments = thumbnail.querySelector('.picture__comments');
+  const thumbnailLikes = thumbnail.querySelector('.picture__likes');
 
-  thumbnail.addEventListener('click', () => {
+  thumbnailImage.src = url;
+  thumbnailImage.alt = description;
+  thumbnailComments.textContent = comments.length;
+  thumbnailLikes.textContent = likes;
+
+  thumbnail.addEventListener('click', (evt) => {
+    evt.preventDefault();
     openBigPicture(data);
   });
 
@@ -30,7 +33,7 @@ const renderThumbnails = (pictures) => {
     fragment.append(thumbnail);
   });
 
-  container.append(fragment);
+  elements.container.append(fragment);
 };
 
-renderThumbnails(objects);
+export { renderThumbnails };
