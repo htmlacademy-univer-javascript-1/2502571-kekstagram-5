@@ -1,3 +1,4 @@
+
 import { resetScale } from './scale.js';
 import { init as initEffect, reset as resetEffect } from './effects.js';
 import { sendData } from './api.js';
